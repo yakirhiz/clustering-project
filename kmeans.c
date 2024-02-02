@@ -170,3 +170,83 @@ void printMat(const double *mat, int n, int d){
         }
     }
 }
+
+/* input:   N_observations = matrix of size Nxd
+ * returns: cents = matrix of size Kxd
+ */
+double *initalizeCentroids(int K, int d, double *N_observations) {
+    int i, j;
+    double *cents;
+
+    cents = (double*) malloc((K*d) * sizeof(double));
+    assert(cents != NULL);
+    /* initialize cents as the first k observations*/
+    for (i = 0; i < K; i++) {
+        for (j = 0; j < d; j++) {
+            cents[i*d + j] = N_observations[i*d + j];
+        }
+    }
+
+    return cents;
+}
+
+/* input:   none, expects 4 cmd arguments and an input stream
+ * returns: 2d matrix (implemented as 1d) where:
+ * matrix[i] is pointer to the i-th row i.e. the i-th observation.
+ * matrix[i][j] is the j-th coord of the i-th row.
+ */
+double *readStdin(int N, int d) {
+    double *N_observations;
+    int i, j;
+
+/*  N_observations = matrix of size N*d*/
+    N_observations = (double*) malloc((d*N) * sizeof(double));
+    assert(N_observations != NULL);
+
+    /* Fill N_observations according to the input file */
+    for (i = 0; i < N; i++) {
+        for (j = 0; j < d; j++) {
+            scanf("%lf,", &N_observations[j + i*d]);
+        }
+    }
+
+    return N_observations;
+}
+
+int main(int argc, char **argv) {
+    int K, N, d, MAX_ITER;
+    double *newCents, *N_observations, *cents;
+    int curr_iter = 0;
+    assert(argc == 5);
+    /* Command line arguments:
+     * K – the number of clusters required.
+     * N – the number of observations in the file
+     * d – the dimension of each observation and initial centroids
+     * MAX_ITER – the maximum number of iterations of the K-means algorithm
+     */
+
+    /* Does not check number of arguments or type */
+    K = atoi(argv[1]);
+    N = atoi(argv[2]);
+    d = atoi(argv[3]);
+    MAX_ITER = atoi(argv[4]);
+
+    N_observations = readStdin(N, d);
+    cents = initalizeCentroids(K, d, N_observations);
+    while (curr_iter < MAX_ITER){
+        curr_iter += 1;
+/*      calculate new centroids*/
+        newCents = calcNewCentroids(K, N, d, cents, N_observations);
+/*      check if cluster centroids change from previous iteration*/
+        if (!centsChanged(K, d, cents, newCents)){
+            break;
+        }
+        free(cents);
+        cents = newCents;
+        printf("\n");
+    }
+
+    printCentroids(K, d, cents);
+    free(N_observations);
+    return 0;
+}

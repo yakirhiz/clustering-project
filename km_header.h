@@ -12,5 +12,7 @@ double *calcNewCentroids(int K, int N, int d, double *cents, double *N_observati
 int centsChanged(int K, int d, double *cents, double *newCents);
 double *readFile(int d, int N, char *path);
 void printMat(const double *mat, int n, int d);
+double *readStdin(int N, int d);
+double *initalizeCentroids(int K, int d, double *N_observations);
 
 #endif //SOFTPROJ_FINAL_KMEANS_HEADER_H
