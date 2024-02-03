@@ -59,8 +59,6 @@ def main(K, N, rand):
 #
 # input:    N = number of points
 #           K = the number of blobs
-#           max_cap_k = the maximum capacity of k Spectral Clustering as described in the document
-#           max_cap_n = ^
 # output:   an ndarray (Nxd) of N points of dimention d
 def genRandPoints(N, K):
     dim = random.randint(2, 3)  # The dimention is chosen randomly between 2 and 3.

@@ -1,5 +1,5 @@
-#ifndef SOFTPROJ_FINAL_KMEANS_HEADER_H
-#define SOFTPROJ_FINAL_KMEANS_HEADER_H
+#ifndef KMEANS_H
+#define KMEANS_H
 
 #define EPSILON 0.0001
 #define MALLOC_CHECK(x) if(x==NULL){puts("\nMalloc Fail\n"); exit(0);}
@@ -15,4 +15,4 @@ void printMat(const double *mat, int n, int d);
 double *readStdin(int N, int d);
 double *initalizeCentroids(int K, int d, double *N_observations);
 
-#endif //SOFTPROJ_FINAL_KMEANS_HEADER_H
+#endif /* KMEANS_H */

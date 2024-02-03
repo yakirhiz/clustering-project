@@ -6,10 +6,6 @@
 
 /*This module holds functions used as tools for the main Spec Clustering Algorithm*/
 
-//for debugging
-void printHello(void){
-    puts("hello");
-};
 
 // reads observations from a file (same format as previous hw)
 // used for debugging

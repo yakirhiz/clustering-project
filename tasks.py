@@ -40,10 +40,6 @@ def run(c, k="no k", n="no n", Random=True):
     c.run("rm *kmeans*.so")
 
 
-#debug
-@task
-def print_hello(c):
-    print("Hellooooo!!!!!")
 
 ### Spectral Clustering tasks
 @task

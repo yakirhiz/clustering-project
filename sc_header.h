@@ -1,5 +1,5 @@
-#ifndef SOFTPROJ_FINAL_TOOLS_H
-#define SOFTPROJ_FINAL_TOOLS_H
+#ifndef SPECTRAL_H
+#define SPECTRAL_H
 
 #define EPSILON 0.0001
 #define MALLOC_CHECK(x) if(x==NULL){puts("\nMalloc Fail\n"); exit(0);}
@@ -26,4 +26,4 @@ double dotCols(const double *A, int colA, const double *B, int colB, int n);
 double *multMat(double *mat1,int n1, int d1, double *mat2, int n2, int d2);
 int comparefunc (const void * a, const void * b);
 
-#endif //SOFTPROJ_FINAL_TOOLS_H
+#endif /* SPECTRAL_H */
