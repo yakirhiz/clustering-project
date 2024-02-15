@@ -16,10 +16,9 @@ double **specClust(double *points, int n, int d, int k_from_user);
 int tup_comparefunc (const void * a, const void * b);
 
 //in Tools.c
-void printHello(void); //for debugging
 double *readFile(int d, int N, char *path); // for debugging
 void printMat(const double *mat, int d, int n);
-double euclidDist(const double vec1[], const double vec2[], int size);
+double squared_euclidean_distance(const double vec1[], const double vec2[], int size);
 double sumRow(double *row, int d);
 double normColumn(const double *mat, int rows, int col);
 double dotCols(const double *A, int colA, const double *B, int colB, int n);

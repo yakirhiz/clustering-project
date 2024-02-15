@@ -44,9 +44,9 @@ int findClosestCent(int d, int K, double *cents, double *obs){
     int index = 0;
     double dist, newDist;
 
-    dist = euclidDist(&cents[0], obs, d);
+    dist = squared_euclidean_distance(&cents[0], obs, d);
     for (i=1; i<K; i++) {
-        newDist = euclidDist(&cents[i*d], obs, d);
+        newDist = squared_euclidean_distance(&cents[i*d], obs, d);
         if (newDist < dist){
             dist = newDist;
             index = i;
@@ -57,7 +57,7 @@ int findClosestCent(int d, int K, double *cents, double *obs){
 
 /* input:   2 vectors of the same size
  * returns: the euclidean distance between vec1 and vec2 */
-double euclidDist(double vec1[], double vec2[], int size){
+double squared_euclidean_distance(double vec1[], double vec2[], int size){
     int i;
     double sum = 0;
 

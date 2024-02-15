@@ -52,7 +52,7 @@ void printMat(const double *mat, int n, int d){
 
 /* input: 2 vectors of the same size
  * returns: the euclidean distance between vec1 and vec2, i.e. |vec1-vec2|^2 */
-double euclidDist(const double vec1[], const double vec2[], int size){
+double squared_euclidean_distance(const double vec1[], const double vec2[], int size){
     int i;
     double sum = 0;
 

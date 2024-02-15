@@ -12,7 +12,7 @@
 // output:  adjacency matrix for the points
 double *formAdjMat(double *points, int d, int n) {
     int i, j;
-    double *p1, *p2, w_ij;
+    double *p1, *p2, weight;
 
     double *adj_mat = (double *) calloc((n*n), sizeof(double));
     MALLOC_CHECK(adj_mat)
@@ -20,13 +20,13 @@ double *formAdjMat(double *points, int d, int n) {
     //for each point, calc the distance to the rest of the points.
     // we only fill out top half of the mat as it is symmetric (undirected graph)
     for (i=0; i<n; i++){
-        adj_mat[i*n + i] = 0; //no self loops
+        adj_mat[i*n + i] = 0;
         p1 = &points[i*d];
         for (j=i+1; j<n; j++){
             p2 = &points[j*d];
-            w_ij = exp((-1.0)*sqrt(euclidDist(p1, p2, d))/2);
-            adj_mat[i*n + j] = w_ij; //exp(a) -> e^a (returns a double)
-            adj_mat[j*n + i] = w_ij; // matrix is symmetric
+            weight = exp((-1.0) * (squared_euclidean_distance(p1, p2, d) / 2));
+            adj_mat[i*n + j] = weight;
+            adj_mat[j*n + i] = weight;
         }
     }
 

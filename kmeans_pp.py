@@ -33,7 +33,6 @@ def readargs():
 def k_means_pp(K, N, d, MAX_ITER, obs):
     np.random.seed(0)
     indices = np.empty(K, dtype="int32")
-    insert_in_index = 0
 
     # My Algo
     cents = np.empty(shape=(K, d), dtype="float64")
@@ -41,8 +40,7 @@ def k_means_pp(K, N, d, MAX_ITER, obs):
     # The first centroid is chosen randomly
     index_of_first = np.random.choice(N, 1)[0]
     cents[0] = obs[index_of_first]
-    indices[insert_in_index] = index_of_first
-    insert_in_index += 1
+    indices[0] = index_of_first
 
     distances = np.full(N, np.inf, dtype="float64")
 
@@ -51,8 +49,7 @@ def k_means_pp(K, N, d, MAX_ITER, obs):
         probs = distances / np.sum(distances)  # Calculate probability of each observation
         index = np.random.choice(N, 1, p=probs)[0]  # Choose index randomly
         cents[j] = obs[index]
-        indices[insert_in_index] = index  # Update the array of indices
-        insert_in_index += 1
+        indices[j] = index  # Update the array of indices
 
     indices.sort()
 
