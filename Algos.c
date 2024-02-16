@@ -335,23 +335,20 @@ int tup_comparefunc (const void * a, const void * b){
     }
 }
 
-
-
-
-// this function implements the Spectral Clustering Algorithm
+// Spectral Clustering Algorithm
 // input:   a set of points as a 1D matrix (nxd) and a k from the user (=0 if k is not provided)
 // output:  a tuple Tk_tup s.t. Tk_tup[0] = "T" (nxk matrix from step 5 of algorithm 3)
 //          Tk_tup[1] = k from step 3 of the algrithm
 double **specClust(double *points, int n, int d, int k_from_user){
     int k;
 
-    double *adj_mat = formAdjMat(points, d, n); //form adj matrix 
+    double *W = formAdjMat(points, d, n); // Weighted Adjacency Matrix
 
-    double *diagdeg_mat = formDiagDegreeMat(adj_mat, n, 1); 
+    double *D = formDiagDegreeMat(W, n, 1); // Diagonal Degree Matrix
 
-    double *lap_mat = formLapMat(adj_mat, diagdeg_mat, n); //form laplacian matrix 
+    double *L = formLapMat(W, D, n); // Normalized Graph Laplacian
 
-    double **AQ_tuple = QRIteration(lap_mat, n); // AQ_tuple[0] = A_hat (diagonal)  ,AQ_tuple[1] = Q_hat (orthogonal)
+    double **AQ_tuple = QRIteration(L, n); // AQ_tuple[0] = A_hat (diagonal)  ,AQ_tuple[1] = Q_hat (orthogonal)
 
     if (k_from_user == 0){
        k = findK(AQ_tuple[0], n); 
@@ -374,9 +371,9 @@ double **specClust(double *points, int n, int d, int k_from_user){
     Tk_tup[1] = k_pointer;
 
 
-    free(adj_mat);
-    free(diagdeg_mat);
-    free(lap_mat);
+    free(W);
+    free(D);
+    free(L);
     free(AQ_tuple[0]);
     free(AQ_tuple[1]);
     free(AQ_tuple);
