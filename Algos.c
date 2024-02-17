@@ -92,12 +92,12 @@ double *formLapMat(double *adj_mat, double *diagdeg_mat, int n) {
     return lap_mat;
 }
 
-// "The Modified Gram-Schmidt Algorithm"
+// The Modified Gram-Schmidt Algorithm
 // input:   a matrix "A" nxn
 // output:  a tuple, "res", of two points. res[0] = Q, res[1] = R
 //          s.t A = QR & Q is orthogonal & R is upper triangular
 double **modGrahamSchmidt(double *A, int n){
-    int i, j, k, l, n_sq;
+    int i, j, k, l;
     double R_ii, Q_ki;
 
     double *Q = (double *)calloc(n*n, sizeof(double));
@@ -107,8 +107,8 @@ double **modGrahamSchmidt(double *A, int n){
 
     double *U = (double *)malloc(n*n*sizeof(double)); // U = A
     MALLOC_CHECK(U)
-    n_sq = n*n;
-    for (i=0; i<n_sq; i++){ // copying U=A
+
+    for (i=0; i<n*n; i++){ // copying U=A
         U[i] = A[i];
     }
 
@@ -149,7 +149,7 @@ double **modGrahamSchmidt(double *A, int n){
     return res;
 }
 
-// This function runs the "QR Iteration Algorithm"
+// QR Iteration Algorithm
 // input:   Laplacian matrix ( or any real, symmetric, full rank matrix)
 // output:  res[0] = diagonal mat "A-bar" whose diagonal elements approach lap_mat's eigenvalues
 //          res[1] = orthogonal mat "Q-bar" whose columns approach lap_mat's eigenvectors
