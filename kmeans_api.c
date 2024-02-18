@@ -42,6 +42,7 @@ static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
     }
 
     free(newCents);
+    free(N_obs);
 
     return pyList;
 }

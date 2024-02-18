@@ -123,7 +123,6 @@ double *kmeans(int K, int N, int d, int MAX_ITER, double *N_obs, double *cents) 
         cents = newCents;
     }
 
-    free(N_obs);
     return cents;
 }
 
