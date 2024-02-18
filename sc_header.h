@@ -16,7 +16,7 @@ double **specClust(double *points, int n, int d, int k_from_user);
 int tup_comparefunc (const void * a, const void * b);
 
 //in Tools.c
-double *readFile(int d, int N, char *path); // for debugging
+double *readFile(int d, int N, char *path);
 void printMat(const double *mat, int d, int n);
 double squared_euclidean_distance(const double vec1[], const double vec2[], int size);
 double sumRow(double *row, int d);

@@ -239,14 +239,15 @@ int main(int argc, char **argv) {
         newCents = calcNewCentroids(K, N, d, cents, N_observations);
 /*      check if cluster centroids change from previous iteration*/
         if (!centsChanged(K, d, cents, newCents)){
+            free(newCents);
             break;
         }
         free(cents);
         cents = newCents;
-        printf("\n");
     }
 
     printCentroids(K, d, cents);
+    free(cents);
     free(N_observations);
     return 0;
 }
