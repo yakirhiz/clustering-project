@@ -30,7 +30,7 @@ double *calcNewCentroids(int K, int N, int d, double *cents, double *N_obs) {
             continue;
         }
         for (j=0; j<d; j++) {
-            newCents[i*d + j] = newCents[i*d + j]/obsInCluster[i];
+            newCents[i*d + j] /= obsInCluster[i];
         }
     }
 
@@ -69,8 +69,7 @@ double squared_euclidean_distance(double vec1[], double vec2[], int size){
 
 int centsChanged(int K, int d, double *cents, double *newCents){
     int diff = 0;
-    int i = 0;
-    int j = 0;
+    int i, j;
 
     for (i=0; i<K; i++){
         for (j=0; j<d; j++){
@@ -85,8 +84,7 @@ int centsChanged(int K, int d, double *cents, double *newCents){
 
 /* Prints a Matrix of dimentions kxd*/
 void printCentroids(int K, int d, double *cents){
-    int i;
-    int j;
+    int i, j;
 
     for (i=0; i<K; i++){
         for (j=0; j<d; j++){
@@ -102,7 +100,7 @@ void printCentroids(int K, int d, double *cents){
 
 double *kmeans(int K, int N, int d, int MAX_ITER, double *N_obs, double *cents) {
     double *newCents;
-    int curr_iter = 0;
+    int iter = 0;
     /* 
      * K – the number of clusters required.
      * N – the number of observations in the file
@@ -110,8 +108,8 @@ double *kmeans(int K, int N, int d, int MAX_ITER, double *N_obs, double *cents) 
      * MAX_ITER – the maximum number of iterations of the K-means algorithm
      */
 
-    while (curr_iter < MAX_ITER){
-        curr_iter += 1;
+    while (iter < MAX_ITER){
+        iter += 1;
 /*      calculate new centroids*/
         newCents = calcNewCentroids(K, N, d, cents, N_obs);
 /*      check if cluster centroids change from previous iteration*/
@@ -155,8 +153,7 @@ double *readFile(int d, int N, char *path) {
 
 /* Prints a Matrix of dimentions nxd*/
 void printMat(const double *mat, int n, int d){
-    int i;
-    int j;
+    int i, j;
 
     for (i=0; i<n; i++){
         for (j=0; j<d; j++){
@@ -214,8 +211,7 @@ double *readStdin(int N, int d) {
 
 int main(int argc, char **argv) {
     int K, N, d, MAX_ITER;
-    double *newCents, *N_observations, *cents;
-    int curr_iter = 0;
+    double *N_observations, *cents;
     assert(argc == 5);
     /* Command line arguments:
      * K – the number of clusters required.
