@@ -232,18 +232,7 @@ int main(int argc, char **argv) {
 
     N_observations = readStdin(N, d);
     cents = initalizeCentroids(K, d, N_observations);
-    while (curr_iter < MAX_ITER){
-        curr_iter += 1;
-/*      calculate new centroids*/
-        newCents = calcNewCentroids(K, N, d, cents, N_observations);
-/*      check if cluster centroids change from previous iteration*/
-        if (!centsChanged(K, d, cents, newCents)){
-            free(newCents);
-            break;
-        }
-        free(cents);
-        cents = newCents;
-    }
+    cents = kmeans(K, N, d, MAX_ITER, N_observations, cents);
 
     printCentroids(K, d, cents);
     free(cents);
