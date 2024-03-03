@@ -12,12 +12,11 @@ import mykmeanssp as km
 # MAX_ITER – the maximum number of iterations of the K-means algorithm
 def readargs():
     parser = argparse.ArgumentParser()
-    K = parser.add_argument("K", type=int, help="K – Number of clusters required.")
-    N = parser.add_argument("N", type=int, help="N – Number of observations in the file.")
-    d = parser.add_argument("d", type=int, help="d – Dimension of each observation and centroid.")
-    MAX_ITER = parser.add_argument("MAX_ITER", type=int,
-                                   help="MAX_ITER – Maximum number of iterations of the K-means algorithm.")
-    filename = parser.add_argument("filename", help="filename - Input file with the observations.")
+    parser.add_argument("K", type=int, help="K – Number of clusters required.")
+    parser.add_argument("N", type=int, help="N – Number of observations in the file.")
+    parser.add_argument("d", type=int, help="d – Dimension of each observation and centroid.")
+    parser.add_argument("MAX_ITER", type=int, help="MAX_ITER – Maximum number of iterations of the K-means algorithm.")
+    parser.add_argument("filename", help="filename - Input file with the observations.")
     args = parser.parse_args()
     return args.K, args.N, args.d, args.MAX_ITER, args.filename
 
@@ -57,8 +56,6 @@ def k_means_pp(K, N, d, MAX_ITER, obs):
     return km.kmeanspp_c(K, N, d, MAX_ITER, obs.tolist(), cents.tolist()) # returns a python 1d array of centroids
 
 
-
-# debug
 def main():
     K, N, d, MAX_ITER, filename = readargs()
     df = pd.read_csv(filename, header=None)
@@ -72,3 +69,7 @@ def main():
         print("Error in arguments")
 
     k_means_pp(K, N, d, MAX_ITER, obs)
+
+
+if __name__ == '__main__':
+    main()
