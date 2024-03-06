@@ -13,6 +13,6 @@ int centsChanged(int K, int d, double *cents, double *newCents);
 double *readFile(int d, int N, char *path);
 void printMat(const double *mat, int n, int d);
 double *readStdin(int N, int d);
-double *initalizeCentroids(int K, int d, double *N_observations);
+double *initializeCentroids(int K, int d, double *N_observations);
 
 #endif /* KMEANS_H */

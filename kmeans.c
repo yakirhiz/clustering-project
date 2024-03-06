@@ -170,7 +170,7 @@ void printMat(const double *mat, int n, int d){
 /* input:   observations = matrix of size Nxd
  * returns: cents = matrix of size Kxd
  */
-double *initalizeCentroids(int K, int d, double *observations) {
+double *initializeCentroids(int K, int d, double *observations) {
     int i, j;
     double *cents;
 
@@ -227,7 +227,7 @@ int main(int argc, char **argv) {
     MAX_ITER = atoi(argv[4]);
 
     observations = readStdin(N, d);
-    cents = initalizeCentroids(K, d, observations);
+    cents = initializeCentroids(K, d, observations);
     cents = kmeans(K, N, d, MAX_ITER, observations, cents);
 
     printCentroids(K, d, cents);
