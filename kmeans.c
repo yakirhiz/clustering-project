@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "km_header.h"
 
-double *calcNewCentroids(int K, int N, int d, double *cents, double *N_obs) {
+double *calcNewCentroids(int K, int N, int d, double *cents, double *observations) {
     int i, j, closestCent;
     double *newCents, *obs;
     int *obsInCluster;
@@ -12,15 +12,15 @@ double *calcNewCentroids(int K, int N, int d, double *cents, double *N_obs) {
     assert(newCents != NULL);
     obsInCluster = (int*)calloc(K, sizeof(int));
     assert(obsInCluster != NULL);
-/*  for each obs in N_observations:
+/*  for each obs in observations:
  *  -find the closest centroid (closestCent)
  *  -add obs to newCents[closestCent]
  *  -incerement obsInCluster[closestCent] by 1 */
     for (i=0; i<N; i++){
-        obs = &N_obs[i*d];
+        obs = &observations[i*d];
         closestCent = findClosestCent(d, K, cents, obs);
         for (j=0; j<d; j++) {
-            newCents[closestCent*d + j] += N_obs[i*d + j];
+            newCents[closestCent*d + j] += observations[i*d + j];
         }
         obsInCluster[closestCent] += 1;
     }
@@ -98,7 +98,7 @@ void printCentroids(int K, int d, double *cents){
     }
 }
 
-double *kmeans(int K, int N, int d, int MAX_ITER, double *N_obs, double *cents) {
+double *kmeans(int K, int N, int d, int MAX_ITER, double *observations, double *cents) {
     double *newCents;
     int iter = 0;
     /* 
@@ -111,7 +111,7 @@ double *kmeans(int K, int N, int d, int MAX_ITER, double *N_obs, double *cents) 
     while (iter < MAX_ITER){
         iter += 1;
 /*      calculate new centroids*/
-        newCents = calcNewCentroids(K, N, d, cents, N_obs);
+        newCents = calcNewCentroids(K, N, d, cents, observations);
 /*      check if cluster centroids change from previous iteration*/
         if (!centsChanged(K, d, cents, newCents)){
             free(newCents);
@@ -128,27 +128,27 @@ double *kmeans(int K, int N, int d, int MAX_ITER, double *N_obs, double *cents) 
 // reads observations from a file (same format as previous hw)
 // used for debugging
 double *readFile(int d, int N, char *path) {
-    double *N_observations;
+    double *observations;
     int i, j;
 
-/*  N_observations = matrix of size N*d*/
-    N_observations = (double*) malloc((d*N) * sizeof(double));
-    MALLOC_CHECK(N_observations)
+/*  observations = matrix of size N*d*/
+    observations = (double*) malloc((d*N) * sizeof(double));
+    MALLOC_CHECK(observations)
 
-    if (N_observations  == NULL){
+    if (observations  == NULL){
         puts("\nProblem in reading Observations file\n");
     }
 
     FILE *f = fopen(path, "r");
 
-    /* Fill N_observations according to the input file */
+    /* Fill observations according to the input file */
     for (i = 0; i < N; i++) {
         for (j = 0; j < d; j++) {
-            fscanf(f ,"%lf,", &N_observations[i*d + j]);
+            fscanf(f ,"%lf,", &observations[i*d + j]);
         }
     }
     fclose(f);
-    return N_observations;
+    return observations;
 }
 
 /* Prints a Matrix of dimentions nxd*/
@@ -167,10 +167,10 @@ void printMat(const double *mat, int n, int d){
     }
 }
 
-/* input:   N_observations = matrix of size Nxd
+/* input:   observations = matrix of size Nxd
  * returns: cents = matrix of size Kxd
  */
-double *initalizeCentroids(int K, int d, double *N_observations) {
+double *initalizeCentroids(int K, int d, double *observations) {
     int i, j;
     double *cents;
 
@@ -179,7 +179,7 @@ double *initalizeCentroids(int K, int d, double *N_observations) {
     /* initialize cents as the first k observations*/
     for (i = 0; i < K; i++) {
         for (j = 0; j < d; j++) {
-            cents[i*d + j] = N_observations[i*d + j];
+            cents[i*d + j] = observations[i*d + j];
         }
     }
 
@@ -192,26 +192,26 @@ double *initalizeCentroids(int K, int d, double *N_observations) {
  * matrix[i][j] is the j-th coord of the i-th row.
  */
 double *readStdin(int N, int d) {
-    double *N_observations;
+    double *observations;
     int i, j;
 
-/*  N_observations = matrix of size N*d*/
-    N_observations = (double*) malloc((d*N) * sizeof(double));
-    assert(N_observations != NULL);
+/*  observations = matrix of size N*d*/
+    observations = (double*) malloc((d*N) * sizeof(double));
+    assert(observations != NULL);
 
-    /* Fill N_observations according to the input file */
+    /* Fill observations according to the input file */
     for (i = 0; i < N; i++) {
         for (j = 0; j < d; j++) {
-            scanf("%lf,", &N_observations[j + i*d]);
+            scanf("%lf,", &observations[j + i*d]);
         }
     }
 
-    return N_observations;
+    return observations;
 }
 
 int main(int argc, char **argv) {
     int K, N, d, MAX_ITER;
-    double *N_observations, *cents;
+    double *observations, *cents;
     assert(argc == 5);
     /* Command line arguments:
      * K – the number of clusters required.
@@ -226,12 +226,12 @@ int main(int argc, char **argv) {
     d = atoi(argv[3]);
     MAX_ITER = atoi(argv[4]);
 
-    N_observations = readStdin(N, d);
-    cents = initalizeCentroids(K, d, N_observations);
-    cents = kmeans(K, N, d, MAX_ITER, N_observations, cents);
+    observations = readStdin(N, d);
+    cents = initalizeCentroids(K, d, observations);
+    cents = kmeans(K, N, d, MAX_ITER, observations, cents);
 
     printCentroids(K, d, cents);
     free(cents);
-    free(N_observations);
+    free(observations);
     return 0;
 }
