@@ -121,19 +121,13 @@ double *kmeans(int K, int N, int d, int MAX_ITER, double *observations, double *
 }
 
 
-// reads observations from a file (same format as previous hw)
-// used for debugging
+// Reads observations from a file
 double *readFile(int d, int N, char *path) {
     double *observations;
     int i, j;
 
-/*  observations = matrix of size N*d*/
     observations = (double*) malloc((d*N) * sizeof(double));
-    MALLOC_CHECK(observations)
-
-    if (observations  == NULL){
-        puts("\nProblem in reading Observations file\n");
-    }
+    assert(observations != NULL);
 
     FILE *f = fopen(path, "r");
 
@@ -175,7 +169,6 @@ double *readStdin(int N, int d) {
     double *observations;
     int i, j;
 
-/*  observations = matrix of size N*d*/
     observations = (double*) malloc((d*N) * sizeof(double));
     assert(observations != NULL);
 
