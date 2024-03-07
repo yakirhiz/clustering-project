@@ -12,10 +12,7 @@ double *calcNewCentroids(int K, int N, int d, double *cents, double *observation
     assert(newCents != NULL);
     obsInCluster = (int*)calloc(K, sizeof(int));
     assert(obsInCluster != NULL);
-/*  for each obs in observations:
- *  -find the closest centroid (closestCent)
- *  -add obs to newCents[closestCent]
- *  -incerement obsInCluster[closestCent] by 1 */
+
     for (i=0; i<N; i++){
         obs = &observations[i*d];
         closestCent = findClosestCent(d, K, cents, obs);
@@ -82,13 +79,12 @@ int centsChanged(int K, int d, double *cents, double *newCents){
     return 0;
 }
 
-/* Prints a Matrix of dimensions kxd*/
-void printCentroids(int K, int d, double *cents){
+/* Prints the centroids (K x d) */
+void print_centroids(double *cents, int K, int d){
     int i, j;
 
     for (i=0; i<K; i++){
         for (j=0; j<d; j++){
-            /* we reached a new row*/
             if (j == d-1){
                 printf("%f\n", cents[i*d + j]);
             } else {
@@ -149,22 +145,6 @@ double *readFile(int d, int N, char *path) {
     }
     fclose(f);
     return observations;
-}
-
-/* Prints a Matrix of dimensions nxd*/
-void printMat(const double *mat, int n, int d){
-    int i, j;
-
-    for (i=0; i<n; i++){
-        for (j=0; j<d; j++){
-            /* we reached a new row*/
-            if (j == d-1){
-                printf("%lf\n", mat[i*d + j]);
-            } else {
-                printf("%lf,", mat[i*d + j]);
-            }
-        }
-    }
 }
 
 /* input:   observations = matrix of size Nxd
@@ -229,7 +209,7 @@ int main(int argc, char **argv) {
     cents = initializeCentroids(K, d, observations);
     cents = kmeans(K, N, d, MAX_ITER, observations, cents);
 
-    printCentroids(K, d, cents);
+    print_centroids(cents, K, d);
     free(cents);
     free(observations);
     return 0;

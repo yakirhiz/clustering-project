@@ -5,7 +5,7 @@
 #define MALLOC_CHECK(x) if(x==NULL){puts("\nMalloc Fail\n"); exit(0);}
 
 double *kmeans(int K, int N, int d, int MAX_ITER, double *N_observations, double *cents);
-void printCentroids(int K, int d, double *cents);
+void print_centroids(int K, int d, double *cents);
 double squared_euclidean_distance(double vec1[], double vec2[], int size);
 int findClosestCent(int d, int K, double *cents, double *obs);
 double *calcNewCentroids(int K, int N, int d, double *cents, double *N_observation);
