@@ -33,7 +33,7 @@ double *readFile(int d, int N, char *path) {
     return N_observations;
 }
 
-/* Prints a Matrix of dimentions nxd*/
+/* Prints a Matrix of dimensions nxd*/
 void printMat(const double *mat, int n, int d){
     int i;
     int j;

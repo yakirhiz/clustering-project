@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # input:    K - the K used in the clustering
 #           K_used_in_blobs - the K used while generating the points
 #           N - the number of points
-#           dim - the dimention of the points
+#           dim - the dimension of the points
 #           matrices1 - list of clusters, where each cluster is numpy 2darray (list of points in the cluster), according to Spectral algorithm
 #           matrices2 - list of clusters, where each cluster is numpy 2darray (list of points in the cluster), according to K-Means algorithm
 #           list_of_points - list of the points

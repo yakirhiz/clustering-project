@@ -82,7 +82,7 @@ int centsChanged(int K, int d, double *cents, double *newCents){
     return 0;
 }
 
-/* Prints a Matrix of dimentions kxd*/
+/* Prints a Matrix of dimensions kxd*/
 void printCentroids(int K, int d, double *cents){
     int i, j;
 
@@ -151,7 +151,7 @@ double *readFile(int d, int N, char *path) {
     return observations;
 }
 
-/* Prints a Matrix of dimentions nxd*/
+/* Prints a Matrix of dimensions nxd*/
 void printMat(const double *mat, int n, int d){
     int i, j;
 
@@ -220,7 +220,6 @@ int main(int argc, char **argv) {
      * MAX_ITER – the maximum number of iterations of the K-means algorithm
      */
 
-    /* Does not check number of arguments or type */
     K = atoi(argv[1]);
     N = atoi(argv[2]);
     d = atoi(argv[3]);

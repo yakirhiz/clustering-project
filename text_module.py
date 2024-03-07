@@ -6,7 +6,7 @@ import numpy as np
 # output_results - create the text files output (create data.txt & clusters.txt)
 # input:    K - the K used in the clustering
 #           N - the number of points
-#           dim - the dimention of the points
+#           dim - the dimension of the points
 #           list_of_points - list of the points
 #           sklearn_clusters - the default clustering from make_blobs
 #           sc_clusterIndecies - ndarray s.t if list_of_points[i] is in cluster matrices1[j] then sc_clusterIndecies[i] == j

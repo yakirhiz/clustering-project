@@ -5,7 +5,7 @@ import numpy as np
 # This function implements Spectral Clustering
 # input:    points - ndarray of n points of dimension d
 #           N - number of points
-#           d - dimention of each point
+#           d - dimension of each point
 #           K - number of clusters
 # output:   a list "clusters" of size K s.t. clusters[i] = an ndarray of points in the cluster
 #           clusterIndecies is an ndarray s.t if points[i] is closet to SC_cents[j] then clusterIndecies[i] == j
