@@ -15,7 +15,7 @@ double *formAdjMat(double *points, int d, int n) {
     double *p1, *p2, weight;
 
     double *adj_mat = (double *) calloc((n*n), sizeof(double));
-    MALLOC_CHECK(adj_mat)
+    MALLOC_CHECK(adj_mat);
 
     //for each point, calc the distance to the rest of the points.
     // we only fill out top half of the mat as it is symmetric (undirected graph)
@@ -40,7 +40,7 @@ double *formDiagDegreeMat(double *adj_mat, int n, int pow_minus_half){
     int i;
 
     double *diagdeg_mat = (double *) calloc((n*n), sizeof(double));
-    MALLOC_CHECK(diagdeg_mat)
+    MALLOC_CHECK(diagdeg_mat);
 
     if (pow_minus_half) {
         for (i = 0; i < n; i++) {
@@ -71,7 +71,7 @@ double *formLapMat(double *adj_mat, double *diagdeg_mat, int n) {
     int i, j;
 
     double *lap_mat = (double *)calloc(n*n, sizeof(double));
-    MALLOC_CHECK(lap_mat)
+    MALLOC_CHECK(lap_mat);
 
     double *DW = multMat(diagdeg_mat, n, n, adj_mat, n, n);
     double *DWD = multMat(DW, n, n, diagdeg_mat, n, n);
@@ -101,12 +101,12 @@ double **modGrahamSchmidt(double *A, int n){
     double R_ii, Q_ki;
 
     double *Q = (double *)calloc(n*n, sizeof(double));
-    MALLOC_CHECK(Q)
+    MALLOC_CHECK(Q);
     double *R = (double *)calloc(n*n, sizeof(double));
-    MALLOC_CHECK(R)
+    MALLOC_CHECK(R);
 
     double *U = (double *)malloc(n*n*sizeof(double)); // U = A
-    MALLOC_CHECK(U)
+    MALLOC_CHECK(U);
 
     for (i=0; i<n*n; i++){ // copying U=A
         U[i] = A[i];
@@ -142,7 +142,7 @@ double **modGrahamSchmidt(double *A, int n){
     free(U);
 
     double **res = (double **)calloc(2, sizeof(double *));
-    MALLOC_CHECK(res)
+    MALLOC_CHECK(res);
     res[0] = Q;
     res[1] = R;
     
@@ -159,14 +159,14 @@ double **QRIteration(const double *A, int n){
 
     //A_bar = A
     double *A_bar =  (double *) calloc(n * n, sizeof(double));
-    MALLOC_CHECK(A_bar)
+    MALLOC_CHECK(A_bar);
     for (i = 0; i < n * n; i++){
         A_bar[i] = A[i];
     }
 
     //Q_bar = I
     double *Q_bar =  (double *) calloc(n * n, sizeof(double));
-    MALLOC_CHECK(Q_bar)
+    MALLOC_CHECK(Q_bar);
     for (i = 0; i < n; i++){
         for (j = 0; j < n; j++) {
             if (i == j){
@@ -178,7 +178,7 @@ double **QRIteration(const double *A, int n){
     }
 
     double **res = (double **)calloc(2, sizeof(double *));
-    MALLOC_CHECK(res)
+    MALLOC_CHECK(res);
     res[0] = A_bar;
     res[1] = Q_bar;
 
@@ -226,7 +226,7 @@ int findK(const double *diag_mat, int n) {
     int i, k;
 
     double *eigenvals = (double *) calloc(n, sizeof(double)); // 1D array of the main diagonal
-    MALLOC_CHECK(eigenvals)
+    MALLOC_CHECK(eigenvals);
     for (i = 0; i < n; ++i) { // filling the vector
         eigenvals[i] = diag_mat[i * n + i];
     }
@@ -234,7 +234,7 @@ int findK(const double *diag_mat, int n) {
     qsort(eigenvals, n, sizeof(double), comparefunc); // sort the eigenvalues in ascending order
 
     double *deltas = (double *) calloc((n-1), sizeof(double));
-    MALLOC_CHECK(deltas)
+    MALLOC_CHECK(deltas);
 
     for (i=0; i<(n-1); ++i) {
         deltas[i] = fabs(eigenvals[i] - eigenvals[i+1]);
@@ -285,11 +285,11 @@ double *obtainFirstKEigen(int k, double *values, double *vectors, int n){
 
     // build an array of tuples (tup) s.t. eigenvals_tup[i] = tup s.t. tup[0] = values[i][i], tup[1] = i
     double **eigenvals_tup = (double **) calloc(n, sizeof(double*));
-    MALLOC_CHECK(eigenvals_tup)
+    MALLOC_CHECK(eigenvals_tup);
 
     for (i=0; i<n; ++i) { // filling the vector
         double *tup_i = (double *) calloc(2, sizeof(double));
-        MALLOC_CHECK(tup_i)
+        MALLOC_CHECK(tup_i);
         tup_i[0] = values[i*n + i];
         tup_i[1] = (double) i;
         eigenvals_tup[i] = tup_i;
@@ -298,7 +298,7 @@ double *obtainFirstKEigen(int k, double *values, double *vectors, int n){
     qsort(eigenvals_tup, n, sizeof(double *), tup_comparefunc); // sort the eigenvalues in ascending order
 
     double *res =  (double *) calloc(k*n, sizeof(double));
-    MALLOC_CHECK(res)
+    MALLOC_CHECK(res);
 
     // go through the sorted arr of tups in ascending order. for each tup i, column i of res is the same as vectors
     for (i=0; i<k; i++){
@@ -366,7 +366,7 @@ double **specClust(double *points, int n, int d, int k_from_user){
 
     // TK_tup[1] = k 
     double *k_pointer = malloc(sizeof(double));
-    MALLOC_CHECK(k_pointer)
+    MALLOC_CHECK(k_pointer);
     k_pointer[0] = (double) k;
     Tk_tup[1] = k_pointer;
 

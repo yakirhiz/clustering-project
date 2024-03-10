@@ -160,11 +160,7 @@ double *initializeCentroids(int K, int d, double *observations) {
     return cents;
 }
 
-/* input:   none, expects 4 cmd arguments and an input stream
- * returns: 2d matrix (implemented as 1d) where:
- * matrix[i] is pointer to the i-th row i.e. the i-th observation.
- * matrix[i][j] is the j-th coord of the i-th row.
- */
+// Reads observations from stdin
 double *readStdin(int N, int d) {
     double *observations;
     int i, j;

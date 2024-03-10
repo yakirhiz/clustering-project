@@ -2,7 +2,13 @@
 #define SPECTRAL_H
 
 #define EPSILON 0.0001
-#define MALLOC_CHECK(x) if(x==NULL){puts("\nMalloc Fail\n"); exit(0);}
+#define MALLOC_CHECK(p) \
+    do { \
+        if ((p) == NULL) { \
+            printf("Memory allocation failed\n"); \
+            exit(1); \
+        } \
+    } while (0)
 
 //in Algos.c
 double *formAdjMat(double *points, int d, int n);

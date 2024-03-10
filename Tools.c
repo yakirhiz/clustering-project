@@ -15,7 +15,7 @@ double *readFile(int d, int N, char *path) {
 
 /*  N_observations = matrix of size N*d*/
     N_observations = (double*) malloc((d*N) * sizeof(double));
-    MALLOC_CHECK(N_observations)
+    MALLOC_CHECK(N_observations);
 
     if (N_observations  == NULL){
         puts("\nProblem in reading Observations file\n");
@@ -113,7 +113,7 @@ double *multMat(double *mat1,int n1, int d1, double *mat2, int n2, int d2){
     }
 
     double *res = (double *) calloc(n1*d2, sizeof(double));
-    MALLOC_CHECK(res)
+    MALLOC_CHECK(res);
 
     for (i=0; i<n1; i++){
         for (j=0; j<d2; j++){
