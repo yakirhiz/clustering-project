@@ -34,7 +34,7 @@ static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
     if (pyList == NULL){ // checking if pyList_new worked
         puts("Problem with creating a Python list in kmeans_api.c");
         free(newCents); 
-        Py_RETURN_NONE; // returning NULL after a failed list init
+        return NULL; // returning NULL after a failed list init
     }
 
     for (i=0; i<d*K; i++){

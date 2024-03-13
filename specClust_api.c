@@ -83,7 +83,7 @@ static PyObject *specClust_CAPI(PyObject *self, PyObject *args){
         puts("Problem with creating a Python list in specClust_api.c");
         free(Tk_tup[0]);
         free(Tk_tup); 
-        Py_RETURN_NONE; // returning NULL after a failed list init
+        return NULL; // returning NULL after a failed list init
     }
 
     for (i=0; i<n*k; i++){

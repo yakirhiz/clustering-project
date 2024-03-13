@@ -4,9 +4,8 @@
 #include "km_header.h"
 
 double *calcNewCentroids(int K, int N, int d, double *cents, double *observations) {
-    int i, j, closestCent;
-    double *newCents, *obs;
-    int *obsInCluster;
+    int i, j, closestCent, *obsInCluster;
+    double *newCents, *observation;
 
     newCents = (double*)calloc((K*d), sizeof(double));
     assert(newCents != NULL);
@@ -14,8 +13,8 @@ double *calcNewCentroids(int K, int N, int d, double *cents, double *observation
     assert(obsInCluster != NULL);
 
     for (i=0; i<N; i++){
-        obs = &observations[i*d];
-        closestCent = findClosestCent(d, K, cents, obs);
+        observation = &observations[i*d];
+        closestCent = findClosestCent(d, K, cents, observation);
         for (j=0; j<d; j++) {
             newCents[closestCent*d + j] += observations[i*d + j];
         }
