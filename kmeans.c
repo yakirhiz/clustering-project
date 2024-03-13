@@ -121,7 +121,7 @@ double *kmeans(int K, int N, int d, int MAX_ITER, double *observations, double *
 
 
 // Reads observations from a file
-double *readFile(int d, int N, char *path) {
+double *readFile(int N, int d, char *path) {
     double *observations;
     int i, j;
 
@@ -130,12 +130,12 @@ double *readFile(int d, int N, char *path) {
 
     FILE *f = fopen(path, "r");
 
-    /* Fill observations according to the input file */
     for (i = 0; i < N; i++) {
         for (j = 0; j < d; j++) {
             fscanf(f ,"%lf,", &observations[i*d + j]);
         }
     }
+
     fclose(f);
     return observations;
 }
@@ -167,7 +167,6 @@ double *readStdin(int N, int d) {
     observations = (double*) malloc((d*N) * sizeof(double));
     assert(observations != NULL);
 
-    /* Fill observations according to the input file */
     for (i = 0; i < N; i++) {
         for (j = 0; j < d; j++) {
             scanf("%lf,", &observations[j + i*d]);

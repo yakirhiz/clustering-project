@@ -7,32 +7,6 @@
 /*This module holds functions used as tools for the main Spec Clustering Algorithm*/
 
 
-// reads observations from a file (same format as previous hw)
-// used for debugging
-double *readFile(int d, int N, char *path) {
-    double *N_observations;
-    int i, j;
-
-/*  N_observations = matrix of size N*d*/
-    N_observations = (double*) malloc((d*N) * sizeof(double));
-    MALLOC_CHECK(N_observations);
-
-    if (N_observations  == NULL){
-        puts("\nProblem in reading Observations file\n");
-    }
-
-    FILE *f = fopen(path, "r");
-
-    /* Fill N_observations according to the input file */
-    for (i = 0; i < N; i++) {
-        for (j = 0; j < d; j++) {
-            fscanf(f ,"%lf,", &N_observations[i*d + j]);
-        }
-    }
-    fclose(f);
-    return N_observations;
-}
-
 /* Prints a Matrix of dimensions nxd*/
 void printMat(const double *mat, int n, int d){
     int i;
