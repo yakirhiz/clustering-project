@@ -93,21 +93,21 @@ void print_centroids(double *cents, int K, int d){
     }
 }
 
+/*
+ * K – the number of clusters required.
+ * N – the number of observations in the file.
+ * d – the dimension of each observation and initial centroids.
+ * MAX_ITER – the maximum number of iterations of the K-means algorithm.
+ * observations - array containing all observations.
+ * cents - array containing initial centroids.
+ */
 double *kmeans(int K, int N, int d, int MAX_ITER, double *observations, double *cents) {
     double *newCents;
     int iter = 0;
-    /* 
-     * K – the number of clusters required.
-     * N – the number of observations in the file
-     * d – the dimension of each observation and initial centroids
-     * MAX_ITER – the maximum number of iterations of the K-means algorithm
-     */
 
     while (iter < MAX_ITER){
         iter += 1;
-/*      calculate new centroids*/
         newCents = calcNewCentroids(K, N, d, cents, observations);
-/*      check if cluster centroids change from previous iteration*/
         if (!centsChanged(K, d, cents, newCents)){
             free(newCents);
             break;
