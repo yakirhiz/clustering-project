@@ -79,7 +79,7 @@ double dotCols(const double *A, int colA, const double *B, int colB, int n){
 // output:  mat -> n1xd2
 double *multMat(double *mat1,int n1, int d1, double *mat2, int n2, int d2){
     int i, j, k;
-    double val_ij;
+    double value;
 
     if(d1 != n2){
         puts("\n invalid matrix multiplication\n");
@@ -91,11 +91,11 @@ double *multMat(double *mat1,int n1, int d1, double *mat2, int n2, int d2){
 
     for (i=0; i<n1; i++){
         for (j=0; j<d2; j++){
-            val_ij = 0;
+            value = 0;
             for (k=0; k<d1; k++){
-                val_ij += mat1[i*n1 + k]*mat2[k*n2 + j];
+                value += mat1[i*d1 + k]*mat2[k*d2 + j];
             }
-            res[i*n1 + j] = val_ij;
+            res[i*n1 + j] = value;
         }
     }
 

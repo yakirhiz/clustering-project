@@ -12,11 +12,11 @@ import mykmeanssp as km
 # MAX_ITER – the maximum number of iterations of the K-means algorithm
 def readargs():
     parser = argparse.ArgumentParser()
-    parser.add_argument("K", type=int, help="K – Number of clusters required.")
-    parser.add_argument("N", type=int, help="N – Number of observations in the file.")
-    parser.add_argument("d", type=int, help="d – Dimension of each observation and centroid.")
-    parser.add_argument("MAX_ITER", type=int, help="MAX_ITER – Maximum number of iterations of the K-means algorithm.")
-    parser.add_argument("filename", help="filename - Input file with the observations.")
+    parser.add_argument("K", type=int, help="Number of clusters required.")
+    parser.add_argument("N", type=int, help="Number of observations in the file.")
+    parser.add_argument("d", type=int, help="Dimension of each observation and centroid.")
+    parser.add_argument("MAX_ITER", type=int, help="Maximum number of iterations of the K-means algorithm.")
+    parser.add_argument("filename", help="Input file with the observations.")
     args = parser.parse_args()
     return args.K, args.N, args.d, args.MAX_ITER, args.filename
 
@@ -68,7 +68,8 @@ def main():
     elif obs.shape != (N, d):
         print("Error in arguments")
 
-    k_means_pp(K, N, d, MAX_ITER, obs)
+    clusters_list = k_means_pp(K, N, d, MAX_ITER, obs)
+    print(np.array(clusters_list).reshape(K, d))
 
 
 if __name__ == '__main__':

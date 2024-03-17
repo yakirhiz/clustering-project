@@ -96,8 +96,6 @@ static PyObject *specClust_CAPI(PyObject *self, PyObject *args){
     //Tk_tup[1] is just a double, k
 
     return pyList;
-    // Py_RETURN_NONE; debug
-
 }
 
 /*
