@@ -1,6 +1,6 @@
 # This module create the plot for the project
 
-import numpy as np
+import os
 import matplotlib.pyplot as plt
 
 
@@ -76,7 +76,7 @@ def plot_results(K, K_used_in_blobs, N, dim, sc_Clusters, km_Clusters, list_of_p
         subplot2.set_ylabel('Y')
 
     plt.tight_layout()
-    plt.savefig("clusters.pdf", bbox_inches='tight', dpi=100)
+    plt.savefig(os.path.join("output", "clusters.pdf"), bbox_inches='tight', dpi=100)
 
 
 # JaccardMeasure - claculating the jaccard measures

@@ -1,5 +1,5 @@
 # This module create the text files output for the project
-
+import os
 import numpy as np
 
 
@@ -35,11 +35,11 @@ def output_results(K, N, dim, list_of_points, sklearn_clusters, sc_clusterIndeci
         else:
             data_output += str(sklearn_clusters[i])
 
-    with open("data.txt", "w") as data_output_file:
+    with open(os.path.join("output", "data.txt"), "w") as data_output_file:
         data_output_file.write(data_output)
 
     # clusters.txt Part
-    clusters_output = str(K) + "\n"  # Fisrt line consist number of clusters
+    clusters_output = str(K) + "\n"  # First line contains number of clusters
 
     # First Algorithm
     for i in range(K):
@@ -63,5 +63,5 @@ def output_results(K, N, dim, list_of_points, sklearn_clusters, sc_clusterIndeci
         else:
             clusters_output += str(points_of_kmeans[i][length - 1])
 
-    with open("clusters.txt", "w") as clusters_output_file:
+    with open(os.path.join("output", "clusters.txt"), "w") as clusters_output_file:
         clusters_output_file.write(clusters_output)
