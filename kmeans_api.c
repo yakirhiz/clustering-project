@@ -9,7 +9,7 @@ static double *createMatrix(PyObject *list, int len, int dim);
 static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
     int K, N, d, MAX_ITER, i;
     PyObject *N_obs_floats, *cents_floats;
-    double *N_obs, *cents;
+    double *observations, *cents;
     /* This parses the Python arguments into a int (iiii)  variable named z and int (O) variable named n*/
     if(!PyArg_ParseTuple(args, "iiiiOO", &K, &N, &d, &MAX_ITER, &N_obs_floats, &cents_floats)) {
         puts("\nerror in line 77");
@@ -22,11 +22,11 @@ static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
         return NULL;
     }
 
-    N_obs = createMatrix(N_obs_floats, N, d);
+    observations = createMatrix(N_obs_floats, N, d);
     cents = createMatrix(cents_floats, K, d);
 
     // uses N_obs and cents and then frees them
-    double *newCents = kmeans(K, N, d, MAX_ITER, N_obs, cents);
+    double *newCents = kmeans(K, N, d, MAX_ITER, observations, cents);
 
     // create a PyList that is a python list and return it to Python.
     // the list will be a 2d-array of size d*k
@@ -42,7 +42,7 @@ static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
     }
 
     free(newCents);
-    free(N_obs);
+    free(observations);
 
     return pyList;
 }
