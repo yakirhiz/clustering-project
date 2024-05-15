@@ -31,15 +31,12 @@ def readargs():
 #   a python 1d array of centroids
 def k_means_pp(K, N, d, MAX_ITER, obs):
     np.random.seed(0)
-    indices = np.empty(K, dtype="int32")
 
     # My Algo
     cents = np.empty(shape=(K, d), dtype="float64")
 
-    # The first centroid is chosen randomly
-    index_of_first = np.random.choice(N, 1)[0]
+    index_of_first = np.random.randint(N)  # The first centroid is chosen randomly
     cents[0] = obs[index_of_first]
-    indices[0] = index_of_first
 
     distances = np.full(N, np.inf, dtype="float64")
 
@@ -48,9 +45,6 @@ def k_means_pp(K, N, d, MAX_ITER, obs):
         probs = distances / np.sum(distances)  # Calculate probability of each observation
         index = np.random.choice(N, 1, p=probs)[0]  # Choose index randomly
         cents[j] = obs[index]
-        indices[j] = index  # Update the array of indices
-
-    indices.sort()
 
     # Call the API
     return km.kmeanspp_c(K, N, d, MAX_ITER, obs.tolist(), cents.tolist()) # returns a python 1d array of centroids
@@ -68,8 +62,8 @@ def main():
     elif obs.shape != (N, d):
         print("Error in arguments")
 
-    clusters_list = k_means_pp(K, N, d, MAX_ITER, obs)
-    print(np.array(clusters_list).reshape(K, d))
+    centroids_list = k_means_pp(K, N, d, MAX_ITER, obs)
+    print(np.array(centroids_list).reshape(K, d))
 
 
 if __name__ == '__main__':
