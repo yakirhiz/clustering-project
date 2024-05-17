@@ -168,13 +168,7 @@ double **QRIteration(const double *A, int n){
     double *Q_bar =  (double *) calloc(n * n, sizeof(double));
     MALLOC_CHECK(Q_bar);
     for (i = 0; i < n; i++){
-        for (j = 0; j < n; j++) {
-            if (i == j){
-                Q_bar[i*n + j] = (double) 1;
-            } else {
-                Q_bar[i*n + j] = (double) 0;
-            }
-        }
+        Q_bar[i * n + i] = 1.0;
     }
 
     double **res = (double **)calloc(2, sizeof(double *));
