@@ -95,7 +95,7 @@ double *multMat(double *mat1,int n1, int d1, double *mat2, int n2, int d2){
             for (k=0; k<d1; k++){
                 value += mat1[i*d1 + k]*mat2[k*d2 + j];
             }
-            res[i*n1 + j] = value;
+            res[i*d2 + j] = value;
         }
     }
 

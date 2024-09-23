@@ -194,7 +194,7 @@ double **QRIteration(const double *A, int n){
         //check if ||Q_bar|-|(Q_bar*Q)|| < epsilon (convergence), if so return.
         converged = 1; //innocent until proven guilty
         for(j=0; j<n*n; j++){
-            if (fabs(fabs(res[1][i])-fabs(QbarQ[i]))>EPSILON){ // fabs returns the absolute val of a double
+            if (fabs(fabs(res[1][j])-fabs(QbarQ[j]))>EPSILON){ // fabs returns the absolute val of a double
                 converged=0;
                 break;
             }
