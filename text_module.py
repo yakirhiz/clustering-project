@@ -24,6 +24,9 @@ def output_results(K, N, dim, list_of_points, sklearn_clusters, sc_clusterIndeci
         points_of_spectral.append((np.where(sc_clusterIndecies == i)[0].tolist()))
         points_of_kmeans.append((np.where(km_clusterIndecies == i)[0].tolist()))
 
+    if not os.path.exists("output"):
+        os.mkdir("output")
+
     # data.txt Part
     data_output = ""
 

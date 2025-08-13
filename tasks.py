@@ -12,12 +12,11 @@ def run(c, k="no k", n="no n", Random=True):
     # import main module
     import main
 
-    if (k == "no k" or n == "no n") and (Random==False): # wrong input
-        print("When \"Random\" Flag is disabled, the program must recieve k and n as inputs.")
-        exit()
-    elif (Random == True):
-        main.main(0,0,True)
-    else: # if Random is false, then 'k' and 'n' are provided
+    if not Random:
+        if (k == "no k" or n == "no n"):
+            print("When \"Random\" Flag is disabled, the program must receive k and n as inputs.")
+            exit()
+
         try:
             int_k = int(k)
             int_n = int(n)
@@ -34,6 +33,8 @@ def run(c, k="no k", n="no n", Random=True):
             else:
                 print("Problem with argument or something went worng.")
             exit()
+    else:
+        main.main(0,0,True)
 
     # remove compiled code
     c.run("rm *mySpecClust*.so")
@@ -41,7 +42,7 @@ def run(c, k="no k", n="no n", Random=True):
 
 
 
-### Spectral Clustering tasks
+# Spectral Clustering tasks
 @task
 def build_sc(c):
     """runs >>python3.8.5 sc_setup.py build_ext --inplace"""
@@ -60,7 +61,7 @@ def rebuild_sc(c):
     c.run("python3.8.5 sc_setup.py build_ext --inplace")
 
 
-### Kmeans++ tasks
+# Kmeans++ tasks
 @task
 def build_km(c):
     """runs >>python3.8.5 sc_setup.py build_ext --inplace"""

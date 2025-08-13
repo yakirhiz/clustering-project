@@ -76,6 +76,10 @@ def plot_results(K, K_used_in_blobs, N, dim, sc_Clusters, km_Clusters, list_of_p
         subplot2.set_ylabel('Y')
 
     plt.tight_layout()
+
+    if not os.path.exists("output"):
+        os.mkdir("output")
+
     plt.savefig(os.path.join("output", "clusters.pdf"), bbox_inches='tight', dpi=100)
 
 
