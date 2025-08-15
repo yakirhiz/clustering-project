@@ -69,26 +69,23 @@ double *formDiagDegreeMat(double *adj_mat, int n, int pow_minus_half){
 // output:  I-DWD where I is the identity matrix
 double *formLapMat(double *adj_mat, double *diagdeg_mat, int n) {
     int i, j;
+    double val;
 
     double *lap_mat = (double *)calloc(n*n, sizeof(double));
     MALLOC_CHECK(lap_mat);
 
-    double *DW = multMat(diagdeg_mat, n, n, adj_mat, n, n);
-    double *DWD = multMat(DW, n, n, diagdeg_mat, n, n);
-
     // calculating lap_mat = I-DWD
     for (i=0; i<n; i++){
         for (j=0; j<n; j++){
+            val = diagdeg_mat[i * n + i] * adj_mat[i * n + j] * diagdeg_mat[j * n + j];
             if (i==j){
-                lap_mat[i*n +j] = 1 - DWD[i*n +j];
+                lap_mat[i*n +j] = 1.0 - val;
             } else {
-                lap_mat[i*n +j] = (-1)*DWD[i*n +j];
+                lap_mat[i*n +j] = 0.0 - val;
             }
         }
     }
 
-    free(DW);
-    free(DWD);
     return lap_mat;
 }
 
