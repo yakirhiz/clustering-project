@@ -16,15 +16,15 @@ import text_module as textmod
 #           rand (bool) = if true draw K and N from (MAX_CAPACITY/2, MAX_CAPACITY)
 # output:   an ndarray Nxd of N points of dimension d
 def main(K, N, rand):
-    max_cap_k = 20
-    max_cap_n = 1000
+    MAX_K = 20
+    MAX_N = 1000
     MAX_ITER = 300
     
-    print(f"Max capacity: k={max_cap_k}, n={max_cap_n}.")
+    print(f"Max capacity: K={MAX_K}, N={MAX_N}.")
 
     if rand:
-        N = np.random.randint(max_cap_n // 2, max_cap_n)
-        K = np.random.randint(max_cap_k // 2, min(max_cap_k, N)) # K cannot be larger than N
+        N = np.random.randint(MAX_N // 2, MAX_N + 1)
+        K = np.random.randint(MAX_K // 2, min(MAX_K, N) + 1) # K cannot be larger than N
         
     K_used_in_blobs = K
 
@@ -61,4 +61,4 @@ def main(K, N, rand):
 # output:   an ndarray (Nxd) of N points of dimension d
 def generate_random_points(N, K):
     dim = np.random.randint(2, 4)  # The dimension is chosen randomly between 2 and 3.
-    return make_blobs(N, dim, centers=K)
+    return make_blobs(n_samples=N, n_features=dim, centers=K)

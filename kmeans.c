@@ -16,14 +16,17 @@ double *calcNewCentroids(int K, int N, int d, double *cents, double *observation
         observation = &observations[i*d];
         closestCent = findClosestCent(d, K, cents, observation);
         for (j=0; j<d; j++) {
-            newCents[closestCent*d + j] += observations[i*d + j];
+            newCents[closestCent*d + j] += observation[j];
         }
-        obsInCluster[closestCent] += 1;
+        obsInCluster[closestCent]++;
     }
 /*   calculate centroids by dividing by |S_j|, while making sure we dont devide by zero*/
     for (i=0; i<K; i++){
         if (obsInCluster[i] == 0){
-            continue;
+            // Keep previous centroid for empty clusters
+            for (int j = 0; j < d; j++) {
+                newCents[i * d + j] = cents[i * d + j];
+            }
         }
         for (j=0; j<d; j++) {
             newCents[i*d + j] /= obsInCluster[i];
