@@ -43,10 +43,10 @@ def main(K, N, rand):
         
     # cluster with K-Means
     KM_cents_list = km.k_means_pp(K, N, d, MAX_ITER, points)
-    KM_cents = np.reshape(np.array(KM_cents_list), (K, d)) # reshape
+    KM_cents = np.array(KM_cents_list).reshape((K, d)) # reshape
     # km_clusterIndecies is an ndarray s.t if points[i] is closet to KM_cents[j] then km_clusterIndecies[i] == j
-    km_clusterIndecies = np.apply_along_axis(lambda row: sc.findClosestCentIndex(row, KM_cents), 1, points)  
-    KM_clusters = [points[i==km_clusterIndecies,:] for i in range(K)] #fancy indexing, puts ndarrays of points in a python list
+    km_clusterIndecies = np.argmin(np.linalg.norm(points[:, None, :] - KM_cents[None, :, :], axis=2), axis=1)
+    KM_clusters = [points[i==km_clusterIndecies] for i in range(K)] #fancy indexing, puts ndarrays of points in a python list
 
     # Visual Output
     plotmod.plot_results(K, K_used_in_blobs, N, d, SC_clusters, KM_clusters, points, sklearn_clusters, sc_clusterIndecies, km_clusterIndecies)
