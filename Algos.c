@@ -162,20 +162,13 @@ double **QRIteration(const double *A, int n){
         Q_bar[i * n + i] = 1.0;
     }
 
-    double **res = (double **)calloc(2, sizeof(double *));
-    MALLOC_CHECK(res);
-    res[0] = A_bar;
-    res[1] = Q_bar;
-
-
     for (i=0; i<n; i++){
-        QR_tup = modGrahamSchmidt(res[0], n); //Obtain Q, R for A from the Modified Gram-Schmidt algorithm
+        QR_tup = modGrahamSchmidt(A_bar, n); //Obtain Q, R for A from the Modified Gram-Schmidt algorithm
 
+        free(A_bar);
         A_bar = multMat(QR_tup[1],n,n,QR_tup[0],n,n); // A_bar = R*Q
-        free(res[0]);
-        res[0] = A_bar;
 
-        double *QbarQ = multMat(res[1],n,n,QR_tup[0],n,n); // Q_bar*Q
+        double *QbarQ = multMat(Q_bar,n,n,QR_tup[0],n,n); // Q_bar*Q
 
         // done with Q and R from modGrahamSchmidt
         free(QR_tup[0]);
@@ -185,7 +178,7 @@ double **QRIteration(const double *A, int n){
         //check if ||Q_bar|-|(Q_bar*Q)|| < epsilon (convergence), if so return.
         converged = 1; //innocent until proven guilty
         for(j=0; j<n*n; j++){
-            if (fabs(fabs(res[1][j])-fabs(QbarQ[j]))>EPSILON){ // fabs returns the absolute val of a double
+            if (fabs(fabs(Q_bar[j])-fabs(QbarQ[j]))>EPSILON){ // fabs returns the absolute val of a double
                 converged=0;
                 break;
             }
@@ -193,13 +186,18 @@ double **QRIteration(const double *A, int n){
 
         if (converged) {
             free(QbarQ);
-            return res;
+            break;
         } else { // another iteration is required
-            free(res[1]);
-            res[1] = QbarQ;
+            free(Q_bar);
+            Q_bar = QbarQ;
         }
 
     }
+
+    double **res = (double **)calloc(2, sizeof(double *));
+    MALLOC_CHECK(res);
+    res[0] = A_bar;
+    res[1] = Q_bar;
 
     return res;
 }
