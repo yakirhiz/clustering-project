@@ -36,27 +36,21 @@ double *formAdjMat(double *points, int d, int n) {
 // input:   Adjacentcy matrix, pow_minus_half boolean
 // output:  "Diagonal Degree Matrix" diagdeg_mat[i][i] = degree of vertex i in graph represented by adj_mat
 //          if pow_minus_half==True, diagdeg_mat[i][i] = 1/sqrt(degree)
-double *formDiagDegreeMat(double *adj_mat, int n, int pow_minus_half){
+double *formDiagDegreeMat(double *adj_mat, int n){
     int i;
 
     double *diagdeg_mat = (double *) calloc((n*n), sizeof(double));
     MALLOC_CHECK(diagdeg_mat);
 
-    if (pow_minus_half) {
-        for (i = 0; i < n; i++) {
-            double sumOfRow_i = sumRow(&adj_mat[i * n], n);
-            if (sumOfRow_i < 0){
-                puts("an error has occured in diagonal degree matrix");
-                exit(0);
-            } else if (sumOfRow_i == 0){
-                diagdeg_mat[i * n + i] = (double) 0;
-            } else {
-                diagdeg_mat[i * n + i] = 1 / sqrt(sumOfRow_i);
-            }
-        }
-    } else { //mainly for debugging
-        for (i=0; i<n; i++){
-            diagdeg_mat[i*n + i] = sumRow(&adj_mat[i*n], n);
+    for (i = 0; i < n; i++) {
+        double sumOfRow_i = sumRow(&adj_mat[i * n], n);
+        if (sumOfRow_i < 0){
+            puts("an error has occured in diagonal degree matrix");
+            exit(0);
+        } else if (sumOfRow_i == 0){
+            diagdeg_mat[i * n + i] = (double) 0;
+        } else {
+            diagdeg_mat[i * n + i] = 1 / sqrt(sumOfRow_i);
         }
     }
 
@@ -335,7 +329,7 @@ double **specClust(double *points, int n, int d, int k_from_user){
 
     double *W = formAdjMat(points, d, n); // Weighted Adjacency Matrix
 
-    double *D = formDiagDegreeMat(W, n, 1); // Diagonal Degree Matrix
+    double *D = formDiagDegreeMat(W, n); // Diagonal Degree Matrix (Inverse Square Root)
 
     double *L = formLapMat(W, D, n); // Normalized Graph Laplacian
 

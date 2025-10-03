@@ -17,7 +17,7 @@ double **modGrahamSchmidt(double *A, int n);
 double **QRIteration(const double *A, int n);
 int findK(const double *diag_mat, int n);
 void normalizeRows(double *mat, int k, int n);
-double *formDiagDegreeMat(double *adj_mat, int n, int pow_minus_half);
+double *formDiagDegreeMat(double *adj_mat, int n);
 double **specClust(double *points, int n, int d, int k_from_user);
 int tup_comparefunc (const void * a, const void * b);
 
