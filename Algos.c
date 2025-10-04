@@ -89,7 +89,6 @@ double *formLapMat(double *adj_mat, double *diagdeg_mat, int n) {
 //          s.t A = QR & Q is orthogonal & R is upper triangular
 double **modGrahamSchmidt(double *A, int n){
     int i, j, k, l;
-    double R_ii, Q_ki;
 
     double *Q = (double *)calloc(n*n, sizeof(double));
     MALLOC_CHECK(Q);
@@ -105,26 +104,23 @@ double **modGrahamSchmidt(double *A, int n){
 
     for (i=0; i<n; i++){
 
-        R_ii = normColumn(U, n, i); // calculates the norm of the ith column
-        R[i*n + i] = R_ii; //R_ii = ||U_i||^2
+        R[i*n + i] = normColumn(U, n, i); // calculates the norm of the ith column (R_ii = ||U_i||^2)
 
 
 
         for (k=0; k<n; k++){ // Q_i = U_i/R_ii
-            if (R_ii != 0){ // make sure we dont devide by zero
-                Q_ki = (1/R_ii)*U[k*n + i];
+            if (R[i*n + i] != 0){ // make sure we dont devide by zero
+                Q[k*n + i] = (1/R[i*n + i])*U[k*n + i];
             } else {
-                Q_ki = 0;
+                Q[k*n + i] = 0;
             }
-            Q[k*n + i] = Q_ki;
         }
 
         for (j=i+1; j<n; j++){
             R[i*n + j] = dotCols(Q, i, U, j, n); // R_ij = Q_i^t * U_j (dot product of columns)
 
             for (l=0; l<n; l++){ //U_j = U_j - R_ij*Q_i
-                double U_lj = (U[l*n + j] - (R[i*n + j] * Q[l*n + i]));
-                U[l*n + j] = U_lj;
+                U[l*n + j] -= R[i*n + j] * Q[l*n + i];
             }
         }
     }
