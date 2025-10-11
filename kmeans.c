@@ -27,9 +27,10 @@ double *calcNewCentroids(int K, int N, int d, double *cents, double *observation
             for (int j = 0; j < d; j++) {
                 newCents[i * d + j] = cents[i * d + j];
             }
-        }
-        for (j=0; j<d; j++) {
-            newCents[i*d + j] /= obsInCluster[i];
+        } else {
+            for (j=0; j<d; j++) {
+                newCents[i*d + j] /= obsInCluster[i];
+            }
         }
     }
 

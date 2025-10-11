@@ -20,11 +20,11 @@ double *formAdjMat(double *points, int d, int n) {
     //for each point, calc the distance to the rest of the points.
     // we only fill out top half of the mat as it is symmetric (undirected graph)
     for (i=0; i<n; i++){
-        adj_mat[i*n + i] = 0;
+        adj_mat[i*n + i] = 0.0;
         p1 = &points[i*d];
         for (j=i+1; j<n; j++){
             p2 = &points[j*d];
-            weight = exp((-1.0) * (squared_euclidean_distance(p1, p2, d) / 2));
+            weight = exp((-1.0) * (squared_euclidean_distance(p1, p2, d) / 2.0));
             adj_mat[i*n + j] = weight;
             adj_mat[j*n + i] = weight;
         }
@@ -44,13 +44,10 @@ double *formDiagDegreeMat(double *adj_mat, int n){
 
     for (i = 0; i < n; i++) {
         double sumOfRow_i = sumRow(&adj_mat[i * n], n);
-        if (sumOfRow_i < 0){
-            puts("an error has occured in diagonal degree matrix");
-            exit(0);
-        } else if (sumOfRow_i == 0){
-            diagdeg_mat[i * n + i] = (double) 0;
+        if (sumOfRow_i == 0){
+            diagdeg_mat[i * n + i] = 0.0;
         } else {
-            diagdeg_mat[i * n + i] = 1 / sqrt(sumOfRow_i);
+            diagdeg_mat[i * n + i] = 1.0 / sqrt(sumOfRow_i);
         }
     }
 
@@ -223,6 +220,7 @@ int findK(const double *diag_mat, int n) {
     double max_delta_i = deltas[0];
     for (i=1; i<(n/2); ++i) {
         if (deltas[i]>max_delta_i){
+            max_delta_i = deltas[i];
             k = i;
         }
     }
@@ -248,7 +246,7 @@ void normalizeRows(double *mat, int n, int k) {
 
         if (rowNorm != 0){ // rowNorm==0 iff every coordinate is 0
             for (j=0; j<k; j++){ // deviding each cordinate by the norm
-                mat[i*k + j] = mat[i*k + j]/rowNorm;
+                mat[i*k + j] /= rowNorm;
             }
         }
     }
