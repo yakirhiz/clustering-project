@@ -12,18 +12,25 @@ static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
     double *observations, *cents;
     /* This parses the Python arguments into a int (iiii)  variable named z and int (O) variable named n*/
     if(!PyArg_ParseTuple(args, "iiiiOO", &K, &N, &d, &MAX_ITER, &N_obs_floats, &cents_floats)) {
-        puts("\nerror in line 77");
         return NULL; /* In the CPython API, a NULL value is never valid for a
                         PyObject* so it is used to signal that an error has occurred. */
     }
     /* check if N_obs_floats is a list*/
     if (!PyList_Check(N_obs_floats) || !(PyList_Check(cents_floats))){
-        puts("\nerror in line 101");
+        PyErr_SetString(PyExc_TypeError, "N_obs_floats and cents_floats must be Python lists");
         return NULL;
     }
 
     observations = createMatrix(N_obs_floats, N, d);
+    if (observations == NULL) {
+        return NULL;
+    }
+
     cents = createMatrix(cents_floats, K, d);
+    if (cents == NULL) {
+        free(observations);
+        return NULL;
+    }
 
     // uses N_obs and cents and then frees them
     double *newCents = kmeans(K, N, d, MAX_ITER, observations, cents);
@@ -32,8 +39,9 @@ static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
     // the list will be a 2d-array of size d*k
     PyObject *pyList = PyList_New(d*K);
     if (pyList == NULL){ // checking if pyList_new worked
-        puts("Problem with creating a Python list in kmeans_api.c");
+        PyErr_SetString(PyExc_MemoryError, "Unable to create a new Python list");
         free(newCents); 
+        free(observations);
         return NULL; // returning NULL after a failed list init
     }
 
@@ -56,26 +64,30 @@ static double *createMatrix(PyObject *list, int len, int dim){
     PyObject *num;
 
     matrix = (double *) malloc(sizeof(double) * len*dim);
-    assert(matrix != NULL);
+    if (matrix == NULL) {
+        PyErr_SetString(PyExc_MemoryError, "Unable to allocate memory for matrix");
+        return NULL;
+    }
+
     for (i=0; i<len; i++) {
         vector = PyList_GetItem(list, i); /* Return value: Borrowed reference */
         if (!PyList_Check(vector)){
-            puts("Parsing error occured in 'createMatix'");
+            PyErr_SetString(PyExc_TypeError, "Each item in the list must be a Python list");
             free(matrix);
-            assert(true);
+            return NULL;
         }
         for (j=0; j<dim; j++){
             num = PyList_GetItem(vector, j);
             if (!PyFloat_Check(num)){
-                puts("Parsing error occured in 'createMatix'");
+                PyErr_SetString(PyExc_TypeError, "Each item in the list must be a float");
                 free(matrix);
-                assert(true);
+                return NULL;
             }
             matrix[i*dim + j] = PyFloat_AsDouble(num); /* Convert a Python float object to double */
-            if (matrix[i*dim + j] == -1 && PyErr_Occurred()){
-                puts("Parsing error occured in 'createMatix'");
+            if (matrix[i*dim + j] == -1.0 && PyErr_Occurred()){
+                PyErr_SetString(PyExc_TypeError, "Error converting Python float to C double");
                 free(matrix);
-                assert(true);
+                return NULL;
             }
         }
     }

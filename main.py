@@ -29,9 +29,7 @@ def main(K, N, rand):
     K_used_in_blobs = K
 
     # create points to be clustered
-    points, sklearn_clusters = generate_random_points(N, K)
-
-    d = points.shape[1] # the dimension of the points
+    points, sklearn_clusters, d = generate_random_points(N, K)
 
     if rand:
         # cluster with Spectral Clustering
@@ -61,4 +59,5 @@ def main(K, N, rand):
 # output:   an ndarray (Nxd) of N points of dimension d
 def generate_random_points(N, K):
     dim = np.random.randint(2, 4)  # The dimension is chosen randomly between 2 and 3.
-    return make_blobs(n_samples=N, n_features=dim, centers=K)
+    points, clusters = make_blobs(n_samples=N, n_features=dim, centers=K)
+    return points, clusters, dim

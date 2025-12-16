@@ -19,27 +19,30 @@ static double *createMatrix(PyObject *list, int len, int dim){
     PyObject *num;
 
     matrix = (double *) calloc(len*dim, sizeof(double));
-    MALLOC_CHECK(matrix);
+    if (matrix == NULL) {
+        PyErr_SetString(PyExc_MemoryError, "Unable to allocate memory for matrix");
+        return NULL;
+    }
 
     for (i=0; i<len; i++) {
         vector = PyList_GetItem(list, i); /* Return value: Borrowed reference */
         if (!PyList_Check(vector)){
-            puts("Parsing error occured in 'createMatix'(1)");
+            PyErr_SetString(PyExc_TypeError, "Each item in the list must be a Python list");
             free(matrix);
-            exit(0);
+            return NULL;
         }
         for (j=0; j<dim; j++){
             num = PyList_GetItem(vector, j);
             if (!PyFloat_Check(num)){
-                puts("Parsing error occured in 'createMatix'(2)");
+                PyErr_SetString(PyExc_TypeError, "Each item in the list must be a float");
                 free(matrix);
-                exit(0);
+                return NULL;
             }
             matrix[i*dim + j] = PyFloat_AsDouble(num); /* Convert a Python float object to double */
-            if (matrix[i*dim + j] == -1 && PyErr_Occurred()){
-                puts("Parsing error occured in 'createMatix'(3)");
+            if (matrix[i*dim + j] == -1.0 && PyErr_Occurred()){
+                PyErr_SetString(PyExc_TypeError, "Error converting Python float to C double");
                 free(matrix);
-                exit(0);
+                return NULL;
             }
         }
     }
@@ -61,17 +64,19 @@ static PyObject *specClust_CAPI(PyObject *self, PyObject *args){
 
     /* This parses the Python arguments into a int (ii)  variable named z and int (O) variable named n*/
     if(!PyArg_ParseTuple(args, "Oiii", &N_obs_floats, &n, &d, &k_from_user)) {
-        puts("\nerror in Parsing points into C PYObject (1)");
         return NULL; /* In the CPython API, a NULL value is never valid for a
                         PyObject* so it is used to signal that an error has occurred. */
     }
     /* check if N_obs_floats is a list*/
     if (!PyList_Check(N_obs_floats)){
-        puts("\nerror in Parsing points into C PYObject (2)");
+        PyErr_SetString(PyExc_TypeError, "N_obs_floats must be a Python list");
         return NULL;
     }
 
     points = createMatrix(N_obs_floats, n, d);
+    if (points == NULL) {
+        return NULL;
+    }
 
     double **Tk_tup = specClust(points, n, d, k_from_user); // if k_from_user == 0 --> we use eigengap heuristic 
     k = (int) *Tk_tup[1]; // the dimensions of Tk_tup[0] are nxk
@@ -80,7 +85,8 @@ static PyObject *specClust_CAPI(PyObject *self, PyObject *args){
     // the list will be a 2d array len==n*k
     PyObject *pyList = PyList_New(n*k);
     if (pyList == NULL){ // checking if pyList_new worked
-        puts("Problem with creating a Python list in specClust_api.c");
+        PyErr_SetString(PyExc_MemoryError, "Unable to create a new Python list");
+        free(points);
         free(Tk_tup[0]);
         free(Tk_tup); 
         return NULL; // returning NULL after a failed list init

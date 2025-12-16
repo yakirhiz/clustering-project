@@ -6,8 +6,8 @@ import sys
 def run(c, k="no k", n="no n", Random=True):
 
     # Compile the C-API modules
-    c.run("python3.8.5 km_setup.py build_ext --inplace")
-    c.run("python3.8.5 sc_setup.py build_ext --inplace")
+    c.run("python km_setup.py build_ext --inplace")
+    c.run("python sc_setup.py build_ext --inplace")
 
     # import main module
     import main
@@ -27,11 +27,11 @@ def run(c, k="no k", n="no n", Random=True):
             assert(isinstance(Random, bool))
             
             main.main(int_k, int_n, False)
-        except:
+        except Exception as e:
             if not ((int(k) > 0) or (int(n) > 0) or (int(n) > k)):
-                print("One of the follwing is a problem: (k > 0) or (n > 0) or (n > k).")    
+                print("One of the following is a problem: (k > 0) or (n > 0) or (n > k).")
             else:
-                print("Problem with argument or something went worng.")
+                print(f"Problem with argument or something went wrong: {e}")
             exit()
     else:
         main.main(0,0,True)
@@ -45,8 +45,7 @@ def run(c, k="no k", n="no n", Random=True):
 # Spectral Clustering tasks
 @task
 def build_sc(c):
-    """runs >>python3.8.5 sc_setup.py build_ext --inplace"""
-    c.run("python3.8.5 sc_setup.py build_ext --inplace")
+    c.run("python sc_setup.py build_ext --inplace")
 
 @task(aliases=['del_sc'])
 def delete_sc(c):
@@ -58,14 +57,13 @@ def rebuild_sc(c):
     c.run("rm -r build")
     c.run("rm *mySpecClust*.so")
     c.run("sleep 0.1")
-    c.run("python3.8.5 sc_setup.py build_ext --inplace")
+    c.run("python sc_setup.py build_ext --inplace")
 
 
 # Kmeans++ tasks
 @task
 def build_km(c):
-    """runs >>python3.8.5 sc_setup.py build_ext --inplace"""
-    c.run("python3.8.5 km_setup.py build_ext --inplace")
+    c.run("python km_setup.py build_ext --inplace")
 
 @task(aliases=['del_km'])
 def delete_km(c):
@@ -77,5 +75,5 @@ def rebuild_km(c):
     c.run("rm -r build")
     c.run("rm *kmeans*.so")
     c.run("sleep 0.1")
-    c.run("python3.8.5 km_setup.py build_ext --inplace")
+    c.run("python km_setup.py build_ext --inplace")
 
