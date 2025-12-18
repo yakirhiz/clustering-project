@@ -47,7 +47,7 @@ def main(K, N, rand):
     KM_clusters = [points[i==km_clusterIndecies] for i in range(K)] #fancy indexing, puts ndarrays of points in a python list
 
     # Visual Output
-    plotmod.plot_results(K, K_used_in_blobs, N, d, SC_clusters, KM_clusters, points, sklearn_clusters, sc_clusterIndecies, km_clusterIndecies)
+    plotmod.plot_results(K, K_used_in_blobs, N, d, points, sklearn_clusters, sc_clusterIndecies, km_clusterIndecies)
     
     # Textual Output
     textmod.output_results(K, N, d, points, sklearn_clusters, sc_clusterIndecies, km_clusterIndecies)

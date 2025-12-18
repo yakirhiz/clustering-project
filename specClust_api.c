@@ -56,7 +56,7 @@ static PyObject *specClust_CAPI(PyObject *self, PyObject *args){
     PyObject *N_obs_floats;
     double *points;
 
-	const int k_from_user;
+	int k_from_user;
     /* Initial values for optional vars. */
     /*const int k_from_user = 0; // if user doesn't provide a k, we find it using eigengap heuristic*/
     /* The mapping of the variables, ending with a NULL sentinel */

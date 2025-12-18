@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 #           sc_clusterIndecies - ndarray s.t if list_of_points[i] is in cluster matrices1[j] then sc_clusterIndecies[i] == j
 #           km_clusterIndecies - ndarray s.t if list_of_points[i] is in cluster matrices2[j] then km_clusterIndecies[i] == j
 # output:   There is no output
-def plot_results(K, K_used_in_blobs, N, dim, sc_Clusters, km_Clusters, list_of_points, sklearn_clusters, sc_clusterIndecies, km_clusterIndecies):
+def plot_results(K, K_used_in_blobs, N, dim, list_of_points, sklearn_clusters, sc_clusterIndecies, km_clusterIndecies):
     fig = plt.figure(figsize=(10, 7))
 
     fig.suptitle("Normalized Spectral Clustering VS. K-Means")  # The title of the figure
@@ -38,8 +38,7 @@ def plot_results(K, K_used_in_blobs, N, dim, sc_Clusters, km_Clusters, list_of_p
         # First subplot
         subplot1 = fig.add_subplot(121)
 
-        for cluster in sc_Clusters:
-            subplot1.scatter(cluster[:, 0], cluster[:, 1], cmap='paired')
+        subplot1.scatter(list_of_points[:, 0], list_of_points[:, 1], c=sc_clusterIndecies, cmap='tab10')
 
         subplot1.set_title("Normalized Spectral Clustering")
         subplot1.set_xlabel('X')
@@ -48,8 +47,7 @@ def plot_results(K, K_used_in_blobs, N, dim, sc_Clusters, km_Clusters, list_of_p
         # Second subplot
         subplot2 = fig.add_subplot(122)
 
-        for cluster in km_Clusters:
-            subplot2.scatter(cluster[:, 0], cluster[:, 1], cmap='paired')
+        subplot2.scatter(list_of_points[:, 0], list_of_points[:, 1], c=km_clusterIndecies, cmap='tab10')
 
         subplot2.set_title("K-Means")
         subplot2.set_xlabel('X')
@@ -58,8 +56,7 @@ def plot_results(K, K_used_in_blobs, N, dim, sc_Clusters, km_Clusters, list_of_p
         # First subplot
         subplot1 = fig.add_subplot(121, projection='3d')
 
-        for cluster in sc_Clusters:
-            subplot1.scatter(cluster[:, 0], cluster[:, 1], cluster[:, 2], cmap='paired')
+        subplot1.scatter(list_of_points[:, 0], list_of_points[:, 1], list_of_points[:, 2], c=sc_clusterIndecies, cmap='tab10')
 
         subplot1.set_title("Normalized Spectral Clustering")
         subplot1.set_xlabel('X')
@@ -68,8 +65,7 @@ def plot_results(K, K_used_in_blobs, N, dim, sc_Clusters, km_Clusters, list_of_p
         # Second subplot
         subplot2 = fig.add_subplot(122, projection='3d')
 
-        for cluster in km_Clusters:
-            subplot2.scatter(cluster[:, 0], cluster[:, 1], cluster[:, 2], cmap='paired')
+        subplot2.scatter(list_of_points[:, 0], list_of_points[:, 1], list_of_points[:, 2], c=km_clusterIndecies, cmap='tab10')
 
         subplot2.set_title("K-Means")
         subplot2.set_xlabel('X')
