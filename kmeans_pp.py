@@ -63,7 +63,7 @@ def main():
         print("Error in arguments")
 
     centroids_list = k_means_pp(K, N, d, MAX_ITER, obs)
-    print(np.array(centroids_list).reshape(K, d))
+    print(np.array(centroids_list))
 
 
 if __name__ == '__main__':

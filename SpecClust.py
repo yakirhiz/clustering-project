@@ -14,17 +14,17 @@ def cluster(points, N, d, K=None):
     # execute the first 5 steps of the algorithm
     if (K==None):
         T_list = sc.specClust_c(points.tolist(), N, d, 0) # matrix T from step 5 if the algo (as a list)
-        K = int(len(T_list)/N)  # k from eigengap heuristic
+        K = len(T_list[0])  # k from eigengap heuristic
     else:
         T_list = sc.specClust_c(points.tolist(), N, d, K)
 
-    T_reshaped = np.reshape(np.array(T_list), (N, K)) # reshape to the correct size
+    T_reshaped = np.array(T_list)
 
     # step 6 in Spectral Clustering
     MAX_ITER = 300 # as described in the bottom of page 5
     SC_cents_list = km.k_means_pp(K, N, K, MAX_ITER, T_reshaped) #cents for clustering of matrix T (points in R^k)
 
-    SC_cents = np.array(SC_cents_list).reshape((K, K)) # turn the returned points into ndarray NxK
+    SC_cents = np.array(SC_cents_list)
 
     # step 7 in Spectral Clustering
     # for each point in T_reshaped, find the index of the closest centroid.

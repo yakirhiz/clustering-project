@@ -9,7 +9,7 @@
 
 static PyObject *specClust_CAPI(PyObject *self, PyObject *args);
 static double *createMatrix(PyObject *list, int len, int dim);
-
+PyObject* matrix_to_pylist(double *matrix, int rows, int cols);
 
 // input: 2d python list of size (dim)x(len), returns: matrix of the same size, implemented as 1d array
 static double *createMatrix(PyObject *list, int len, int dim){
@@ -83,17 +83,12 @@ static PyObject *specClust_CAPI(PyObject *self, PyObject *args){
 
     // create a PyList that is a python list and return it to Python.
     // the list will be a 2d array len==n*k
-    PyObject *pyList = PyList_New(n*k);
+    PyObject *pyList = matrix_to_pylist(Tk_tup[0], n, k);
     if (pyList == NULL){ // checking if pyList_new worked
-        PyErr_SetString(PyExc_MemoryError, "Unable to create a new Python list");
         free(points);
         free(Tk_tup[0]);
         free(Tk_tup); 
         return NULL; // returning NULL after a failed list init
-    }
-
-    for (i=0; i<n*k; i++){
-        PyList_SetItem(pyList, i, PyFloat_FromDouble(Tk_tup[0][i]));
     }
 
     free(points);
@@ -102,6 +97,39 @@ static PyObject *specClust_CAPI(PyObject *self, PyObject *args){
     //Tk_tup[1] is just a double, k
 
     return pyList;
+}
+
+PyObject* matrix_to_pylist(double *matrix, int rows, int cols) {
+    PyObject *outer = PyList_New(rows);
+    if (outer == NULL) {
+        PyErr_SetString(PyExc_MemoryError, "Unable to create outer list");
+        return NULL;
+    }
+
+    for (int i = 0; i < rows; i++) {
+        PyObject *row = PyList_New(cols);
+        if (row == NULL) {
+            PyErr_SetString(PyExc_MemoryError, "Unable to create inner list");
+            Py_DECREF(outer);
+            return NULL;
+        }
+
+        for (int j = 0; j < cols; j++) {
+            PyObject *num = PyFloat_FromDouble(matrix[i * cols + j]);
+            if (num == NULL) {
+                PyErr_SetString(PyExc_MemoryError, "Unable to create float");
+                Py_DECREF(row);
+                Py_DECREF(outer);
+                return NULL;
+            }
+
+            PyList_SetItem(row, j, num);  // steals reference
+        }
+
+        PyList_SetItem(outer, i, row);  // steals reference
+    }
+
+    return outer;
 }
 
 /*

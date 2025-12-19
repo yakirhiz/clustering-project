@@ -4,7 +4,7 @@
 
 static PyObject* kmeanspp_capi(PyObject *self, PyObject *args);
 static double *createMatrix(PyObject *list, int len, int dim);
-
+PyObject* matrix_to_pylist(double *matrix, int rows, int cols);
 
 static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
     int K, N, d, MAX_ITER, i;
@@ -37,16 +37,11 @@ static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
 
     // create a PyList that is a python list and return it to Python.
     // the list will be a 2d-array of size d*k
-    PyObject *pyList = PyList_New(d*K);
+    PyObject *pyList = matrix_to_pylist(newCents, K, d);
     if (pyList == NULL){ // checking if pyList_new worked
-        PyErr_SetString(PyExc_MemoryError, "Unable to create a new Python list");
         free(newCents); 
         free(observations);
         return NULL; // returning NULL after a failed list init
-    }
-
-    for (i=0; i<d*K; i++){
-        PyList_SetItem(pyList, i, PyFloat_FromDouble(newCents[i]));
     }
 
     free(newCents);
@@ -95,6 +90,38 @@ static double *createMatrix(PyObject *list, int len, int dim){
     return matrix;
 }
 
+PyObject* matrix_to_pylist(double *matrix, int rows, int cols) {
+    PyObject *outer = PyList_New(rows);
+    if (outer == NULL) {
+        PyErr_SetString(PyExc_MemoryError, "Unable to create outer list");
+        return NULL;
+    }
+
+    for (int i = 0; i < rows; i++) {
+        PyObject *row = PyList_New(cols);
+        if (row == NULL) {
+            PyErr_SetString(PyExc_MemoryError, "Unable to create inner list");
+            Py_DECREF(outer);
+            return NULL;
+        }
+
+        for (int j = 0; j < cols; j++) {
+            PyObject *num = PyFloat_FromDouble(matrix[i * cols + j]);
+            if (num == NULL) {
+                PyErr_SetString(PyExc_MemoryError, "Unable to create float");
+                Py_DECREF(row);
+                Py_DECREF(outer);
+                return NULL;
+            }
+
+            PyList_SetItem(row, j, num);  // steals reference
+        }
+
+        PyList_SetItem(outer, i, row);  // steals reference
+    }
+
+    return outer;
+}
 
 /*
  * This array tells Python what methods this module has.
