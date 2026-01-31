@@ -22,7 +22,7 @@ def cluster(points, N, d, K=None):
 
     # step 6 in Spectral Clustering
     MAX_ITER = 300 # as described in the bottom of page 5
-    SC_cents_list = km.k_means_pp(K, N, K, MAX_ITER, T_reshaped) #cents for clustering of matrix T (points in R^k)
+    SC_cents_list, _ = km.k_means_pp(K, N, K, MAX_ITER, T_reshaped) #cents for clustering of matrix T (points in R^k)
 
     SC_cents = np.array(SC_cents_list)
 

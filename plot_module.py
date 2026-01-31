@@ -61,6 +61,7 @@ def plot_results(K, K_used_in_blobs, N, dim, list_of_points, sklearn_clusters, s
         subplot1.set_title("Normalized Spectral Clustering")
         subplot1.set_xlabel('X')
         subplot1.set_ylabel('Y')
+        subplot1.set_zlabel('Z')
 
         # Second subplot
         subplot2 = fig.add_subplot(122, projection='3d')
@@ -70,6 +71,7 @@ def plot_results(K, K_used_in_blobs, N, dim, list_of_points, sklearn_clusters, s
         subplot2.set_title("K-Means")
         subplot2.set_xlabel('X')
         subplot2.set_ylabel('Y')
+        subplot2.set_zlabel('Z')
 
     plt.tight_layout()
 

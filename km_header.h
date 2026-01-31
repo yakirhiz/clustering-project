@@ -10,11 +10,11 @@
         } \
     } while (0)
 
-double *kmeans(int K, int N, int d, int MAX_ITER, double *observations, double *cents);
+double *kmeans(int K, int N, int d, int MAX_ITER, double *observations, double *cents, int *labels);
 void print_centroids(double *cents, int K, int d);
 double squared_euclidean_distance(double vec1[], double vec2[], int size);
 int findClosestCent(int d, int K, double *cents, double *obs);
-double *calcNewCentroids(int K, int N, int d, double *cents, double *observations);
+double *calcNewCentroids(int K, int N, int d, double *cents, double *observations, int *labels);
 int centsChanged(int K, int d, double *cents, double *newCents);
 double *readFile(int N, int d, char *path);
 double *readStdin(int N, int d);

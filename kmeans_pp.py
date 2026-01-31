@@ -62,7 +62,7 @@ def main():
     elif obs.shape != (N, d):
         print("Error in arguments")
 
-    centroids_list = k_means_pp(K, N, d, MAX_ITER, obs)
+    centroids_list, _ = k_means_pp(K, N, d, MAX_ITER, obs)
     print(np.array(centroids_list))
 
 

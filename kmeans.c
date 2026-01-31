@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include "km_header.h"
 
-double *calcNewCentroids(int K, int N, int d, double *cents, double *observations) {
+double *calcNewCentroids(int K, int N, int d, double *cents, double *observations, int *labels) {
     int i, j, closestCent, *obsInCluster;
     double *newCents, *observation;
 
@@ -19,6 +19,7 @@ double *calcNewCentroids(int K, int N, int d, double *cents, double *observation
             newCents[closestCent*d + j] += observation[j];
         }
         obsInCluster[closestCent]++;
+        labels[i] = closestCent;
     }
 /*   calculate centroids by dividing by |S_j|, while making sure we dont devide by zero*/
     for (i=0; i<K; i++){
@@ -105,13 +106,13 @@ void print_centroids(double *cents, int K, int d){
  * observations - array containing all observations.
  * cents - array containing initial centroids.
  */
-double *kmeans(int K, int N, int d, int MAX_ITER, double *observations, double *cents) {
+double *kmeans(int K, int N, int d, int MAX_ITER, double *observations, double *cents, int *labels) {
     double *newCents;
     int iter = 0;
 
     while (iter < MAX_ITER){
         iter += 1;
-        newCents = calcNewCentroids(K, N, d, cents, observations);
+        newCents = calcNewCentroids(K, N, d, cents, observations, labels);
         if (!centsChanged(K, d, cents, newCents)){
             free(newCents);
             break;
@@ -181,7 +182,7 @@ double *readStdin(int N, int d) {
 }
 
 int main(int argc, char **argv) {
-    int K, N, d, MAX_ITER;
+    int K, N, d, MAX_ITER, *labels;
     double *observations, *cents;
     assert(argc == 5);
     /* Command line arguments:
@@ -198,10 +199,12 @@ int main(int argc, char **argv) {
 
     observations = readStdin(N, d);
     cents = initializeCentroids(K, d, observations);
-    cents = kmeans(K, N, d, MAX_ITER, observations, cents);
+    labels = (int*) malloc(N * sizeof(int));
+    cents = kmeans(K, N, d, MAX_ITER, observations, cents, labels);
 
     print_centroids(cents, K, d);
     free(cents);
     free(observations);
+    free(labels);
     return 0;
 }

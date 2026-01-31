@@ -40,7 +40,7 @@ def main(K, N, rand):
         SC_clusters, sc_clusterIndecies = sc.cluster(points, N, points.shape[1], K)
         
     # cluster with K-Means
-    KM_cents_list = km.k_means_pp(K, N, d, MAX_ITER, points)
+    KM_cents_list, _ = km.k_means_pp(K, N, d, MAX_ITER, points)
     KM_cents = np.array(KM_cents_list)
     # km_clusterIndecies is an ndarray s.t if points[i] is closet to KM_cents[j] then km_clusterIndecies[i] == j
     km_clusterIndecies = np.argmin(np.linalg.norm(points[:, None, :] - KM_cents[None, :, :], axis=2), axis=1)

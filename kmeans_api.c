@@ -5,9 +5,10 @@
 static PyObject* kmeanspp_capi(PyObject *self, PyObject *args);
 static double *createMatrix(PyObject *list, int len, int dim);
 PyObject* matrix_to_pylist(double *matrix, int rows, int cols);
+PyObject* vector_to_pylist(int *vector, int size);
 
 static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
-    int K, N, d, MAX_ITER, i;
+    int K, N, d, MAX_ITER, i, *labels;
     PyObject *N_obs_floats, *cents_floats;
     double *observations, *cents;
     /* This parses the Python arguments into a int (iiii)  variable named z and int (O) variable named n*/
@@ -32,8 +33,16 @@ static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
         return NULL;
     }
 
+    labels = (int*) malloc(N * sizeof(int));
+    if (labels == NULL) {
+        PyErr_SetString(PyExc_MemoryError, "Unable to allocate memory for labels");
+        free(observations);
+        free(cents);
+        return NULL;
+    }
+
     // uses N_obs and cents and then frees them
-    double *newCents = kmeans(K, N, d, MAX_ITER, observations, cents);
+    double *newCents = kmeans(K, N, d, MAX_ITER, observations, cents, labels);
 
     // create a PyList that is a python list and return it to Python.
     // the list will be a 2d-array of size d*k
@@ -44,10 +53,34 @@ static PyObject* kmeanspp_capi(PyObject *self, PyObject *args){
         return NULL; // returning NULL after a failed list init
     }
 
+    PyObject *labelsList = vector_to_pylist(labels, N);
+    if (labelsList == NULL){ // checking if labelsList worked
+        Py_DECREF(pyList);
+        free(newCents); 
+        free(observations);
+        free(labels);
+        return NULL; // returning NULL after a failed list init
+    }
+
+    PyObject *result = PyTuple_New(2);
+    if (result == NULL) {
+        PyErr_SetString(PyExc_MemoryError, "Unable to create result tuple");
+        Py_DECREF(labelsList);
+        Py_DECREF(pyList);
+        free(newCents);
+        free(observations);
+        free(labels);
+        return NULL;
+    }
+
+    PyTuple_SetItem(result, 0, pyList);  // steals reference
+    PyTuple_SetItem(result, 1, labelsList);  // steals reference
+
     free(newCents);
     free(observations);
+    free(labels);
 
-    return pyList;
+    return result;
 }
 
 
@@ -121,6 +154,27 @@ PyObject* matrix_to_pylist(double *matrix, int rows, int cols) {
     }
 
     return outer;
+}
+
+PyObject* vector_to_pylist(int *vector, int size) {
+    PyObject *list = PyList_New(size);
+    if (list == NULL) {
+        PyErr_SetString(PyExc_MemoryError, "Unable to create list");
+        return NULL;
+    }
+
+    for (int i = 0; i < size; i++) {
+        PyObject *num = PyLong_FromLong(vector[i]);
+        if (num == NULL) {
+            PyErr_SetString(PyExc_MemoryError, "Unable to create integer");
+            Py_DECREF(list);
+            return NULL;
+        }
+
+        PyList_SetItem(list, i, num);  // steals reference
+    }
+
+    return list;
 }
 
 /*
